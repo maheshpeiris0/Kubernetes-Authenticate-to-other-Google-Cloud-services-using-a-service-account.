@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: df-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: df-app
+  template:
+    metadata:
+      labels:
+        app: df-app
+    spec:
+      volumes:
+      - name: google-cloud-key
+        secret:
+          secretName: pubsub-key
+      containers:
+      - name: df-app
+        image: #image docker address 
+        volumeMounts:
+        - name: google-cloud-key
+          mountPath: /var/secrets/google
+        env:
+        - name: GOOGLE_APPLICATION_CREDENTIALS
+          value: /var/secrets/google/key.json
